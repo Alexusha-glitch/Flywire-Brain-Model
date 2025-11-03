@@ -1,63 +1,100 @@
 import numpy as np
 import pandas as pd
 import networkx as nx
-import matplotlib
-matplotlib.use('QtAgg')
-import matplotlib.pyplot as plt
 from pyvis.network import Network
 from tqdm import tqdm
 import time
-
-# --------------------------- Custom Class ---------------------------
-class neurone:
-    def __init__(self, connections, activation, id):
-        self.connections = connections
-        self.activation = activation
-        self.id = id
-
-    def activate(self):
-        totalSynapses = np.sum(self.connections[:, 1])
-        self.connections[:, 0].activation = self.activation * self.connections[:, 1] / totalSynapses
 
 # --------------------------- Load Data ---------------------------
 print("Loading connectivity CSV...")
 connectivity = pd.read_csv(
     r"C:\Users\sysco\Downloads\FlyWire Raw Data\connections_princeton.csv\connections_princeton.csv"
 )
-print(f"Loaded {len(connectivity):,} edges")
+print(f"✅ Loaded {len(connectivity):,} edges")
 
-# --------------------------- Build NetworkX Graph ---------------------------
-print("\nBuilding NetworkX graph...")
+# --------------------------- Build Graph ---------------------------
+print("\nBuilding NetworkX directed graph...")
 
-# tqdm progress bar on edge creation
 G = nx.DiGraph()
 for _, row in tqdm(connectivity.iterrows(), total=len(connectivity), desc="Adding edges"):
-    G.add_edge(row.iloc[0], row.iloc[1], weight=row.iloc[3])
+    # assumes: source, target, ..., weight in 4th column
+    try:
+        src, dst, weight = row.iloc[0], row.iloc[1], row.iloc[3]
+        G.add_edge(src, dst, weight=weight)
+    except Exception:
+        continue
 
 print(f"✅ Graph complete: {G.number_of_nodes():,} nodes, {G.number_of_edges():,} edges")
 
-# --------------------------- Build PyVis Graph ---------------------------
-print("\nConverting to PyVis network...")
+# --------------------------- Convert to PyVis ---------------------------
+print("\nConverting to PyVis network (browser-optimized)...")
 
-net = Network(height="900px", width="100%", bgcolor="#111", font_color="white", directed=True)
+net = Network(
+    height="1000px",
+    width="100%",
+    bgcolor="#0d0d0d",
+    font_color="white",
+    directed=True,
+    notebook=False,
+)
 
-# Add nodes with progress bar
-for node in tqdm(G.nodes(), total=G.number_of_nodes(), desc="Adding nodes"):
+# --- super important: disable physics explosions for large graphs ---
+# Uses hierarchical layout for faster rendering, no lag
+net.set_options("""
+var options = {
+  nodes: {
+    shape: 'dot',
+    size: 3,
+    font: { size: 8, color: '#ffffff' }
+  },
+  edges: {
+    color: { inherit: 'both' },
+    width: 0.1,
+    smooth: false
+  },
+  physics: {
+    enabled: true,
+    solver: 'barnesHut',
+    barnesHut: {
+      gravitationalConstant: -3000,
+      springLength: 45,
+      springConstant: 0.005,
+      damping: 0.9,
+      avoidOverlap: 0.3
+    },
+    stabilization: { iterations: 50, fit: true }
+  },
+  interaction: {
+    hover: true,
+    tooltipDelay: 100,
+    zoomView: true,
+    navigationButtons: true,
+    keyboard: true
+  },
+  layout: {
+    improvedLayout: false
+  }
+}
+""")
+
+# --- add nodes in one sweep (no tqdm here to avoid slow console I/O) ---
+for node in G.nodes():
     net.add_node(str(node), title=f"Neuron {node}")
 
-# Add edges with progress bar
-for u, v, data in tqdm(G.edges(data=True), total=G.number_of_edges(), desc="Adding edges to PyVis"):
-    net.add_edge(str(u), str(v), value=data.get("weight", 1))
+# --- batch edge addition (chunked to speed up memory use) ---
+edges = list(G.edges(data=True))
+chunk_size = 50000
+for i in range(0, len(edges), chunk_size):
+    batch = edges[i:i+chunk_size]
+    for u, v, data in batch:
+        net.add_edge(str(u), str(v), value=data.get("weight", 1))
+    print(f"  Added edges {i:,}–{i+len(batch):,} / {len(edges):,}")
 
-print("✅ Conversion complete. Exporting to HTML...")
-
-try:
-    # try normal notebook rendering first
-    net.show("FlywireGraph.html", notebook=True)
-except Exception as e:
-    print(f"⚠️ PyVis show() failed: {e}")
-    print("Falling back to write_html()...")
-    net.write_html("FlywireGraph.html")
-    print("✅ Graph HTML written directly to FlywireGraph.html")
+print("✅ Conversion complete. Writing to FlywireGraph.html ...")
 
 # --------------------------- Export ---------------------------
+t0 = time.time()
+net.write_html("FlywireGraph.html")
+print(f"✅ Done! HTML saved as FlywireGraph.html ({time.time()-t0:.2f}s)")
+print("Open it manually in Chrome or Edge (double-click the file).")
+print("If it loads slowly, wait a few seconds — all nodes/edges are included.")
