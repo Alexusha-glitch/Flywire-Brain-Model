@@ -1,0 +1,4 @@
+flygym==2.1.0
+pandas>=2.2,<4
+scipy>=1.15,<2
+numpy>=2,<3
