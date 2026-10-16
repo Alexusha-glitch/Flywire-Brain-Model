@@ -1,0 +1,17 @@
+{
+  "status": "viewer_closed",
+  "choice": null,
+  "decision_time_s": null,
+  "simulated_s": 2.0168,
+  "wall_s": 58.345029500022065,
+  "simulated_seconds_per_wall_second": 0.03456678344809539,
+  "neural_compute_s": 0.0,
+  "body_compute_s": 50.19765029818518,
+  "neural_updates": 0,
+  "mode": "scripted",
+  "scripted_target": "left",
+  "odor_condition": "left",
+  "seed": 0,
+  "logged_samples": 101,
+  "wall_contact_samples": 0
+}

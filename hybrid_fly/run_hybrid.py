@@ -8,7 +8,7 @@ from pathlib import Path
 import time
 import numpy as np
 from load_network import load_network
-from hybrid_fly.neural_model import MotorDecoder
+from neural_model import MotorDecoder
 
 
 def inspect_data(cfg, root):

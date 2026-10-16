@@ -1,0 +1,81 @@
+{
+  "arguments": {
+    "mode": "demo",
+    "config": "C:\\Users\\sysco\\Documents\\GitHub\\Flywire-Brain-Model\\hybrid_fly\\hybrid_config.json",
+    "seconds": 5.0,
+    "input": "pulse",
+    "no_viewer": false,
+    "neural_only": false,
+    "inspect": false
+  },
+  "config": {
+    "data": {
+      "neurons_csv": "../Data/neurons.csv",
+      "connections_csv": "../Data/connections_princeton.csv",
+      "unmapped_transmitters": "error"
+    },
+    "columns": {
+      "neuron_id": null,
+      "verified_nt": null,
+      "predicted_nt": null,
+      "pre": null,
+      "post": null,
+      "count": null
+    },
+    "populations": {
+      "input_left": [],
+      "input_right": [],
+      "output_left": [],
+      "output_right": []
+    },
+    "nt_class_map": {
+      "ACH": "exc",
+      "acetylcholine": "exc",
+      "cholinergic": "exc",
+      "GABA": "inh",
+      "GABAergic": "inh"
+    },
+    "neuron_class_overrides": {},
+    "neural": {
+      "unit_conductance_nS": 0.3,
+      "capacitance_pF": 200.0,
+      "leak_nS": 10.0,
+      "rest_mV": -65.0,
+      "reset_mV": -65.0,
+      "threshold_mV": -50.0,
+      "exc_reversal_mV": 0.0,
+      "inh_reversal_mV": -80.0,
+      "refractory_ms": 2.0,
+      "synapse_decay_ms": 5.0,
+      "release_fraction": 0.5,
+      "rate_filter_ms": 50.0
+    },
+    "decoder": {
+      "baseline": [
+        0.0,
+        0.0
+      ],
+      "gain_per_hz": [
+        0.025,
+        0.025
+      ],
+      "minimum": 0.0,
+      "maximum": 1.2
+    },
+    "stimulus": {
+      "amplitude_pA": 700.0,
+      "baseline_pA": 0.0,
+      "switch_every_s": 1.5,
+      "source_xy_mm": [
+        6.0,
+        3.0
+      ],
+      "odor_sigma_mm": 6.0
+    }
+  },
+  "network_report": {
+    "mode": "SYNTHETIC DEMO",
+    "neurons": 4,
+    "edges": 2
+  }
+}

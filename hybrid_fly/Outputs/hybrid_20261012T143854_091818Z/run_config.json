@@ -1,0 +1,306 @@
+{
+  "arguments": {
+    "mode": "banc",
+    "config": "C:\\Users\\sysco\\Documents\\GitHub\\Flywire-Brain-Model\\hybrid_fly\\hybrid_config.json",
+    "seconds": 3.0,
+    "input": "pulse",
+    "no_viewer": false,
+    "neural_only": true,
+    "inspect": false
+  },
+  "config": {
+    "data": {
+      "neurons_csv": "../Data/neurons.csv",
+      "connections_csv": "../Data/connections_princeton.csv",
+      "unmapped_transmitters": "disable",
+      "exclude_super_classes": [
+        "glia",
+        "trachea",
+        "not_a_neuron"
+      ]
+    },
+    "columns": {
+      "neuron_id": "Root ID",
+      "verified_nt": "Verified NT type",
+      "predicted_nt": "Predicted NT type",
+      "pre": "pre_root_id",
+      "post": "post_root_id",
+      "count": "syn_count"
+    },
+    "populations": {
+      "input_left": [
+        "720575941410063919",
+        "720575941430466223",
+        "720575941430586543",
+        "720575941432035031",
+        "720575941437251858",
+        "720575941438746175",
+        "720575941449902517",
+        "720575941461001924",
+        "720575941463217421",
+        "720575941473435277",
+        "720575941481255136",
+        "720575941483094269",
+        "720575941485028861",
+        "720575941487868166",
+        "720575941490513868",
+        "720575941494707691",
+        "720575941496830336",
+        "720575941503927858",
+        "720575941505769125",
+        "720575941507669889",
+        "720575941509989136",
+        "720575941519494254",
+        "720575941520135852",
+        "720575941522243831",
+        "720575941526205517",
+        "720575941528042265",
+        "720575941534127704",
+        "720575941535144626",
+        "720575941535686938",
+        "720575941537847523",
+        "720575941550087284",
+        "720575941556450468",
+        "720575941556721636",
+        "720575941562610856",
+        "720575941566556423",
+        "720575941568201518",
+        "720575941572933627",
+        "720575941573648136",
+        "720575941575199995",
+        "720575941598257564",
+        "720575941628831782",
+        "720575941630444002",
+        "720575941630492130",
+        "720575941659300944",
+        "720575941690491544"
+      ],
+      "input_right": [
+        "720575941408399663",
+        "720575941410065199",
+        "720575941410449067",
+        "720575941413632404",
+        "720575941416130076",
+        "720575941432246286",
+        "720575941442501583",
+        "720575941442558399",
+        "720575941443386319",
+        "720575941451891322",
+        "720575941452078158",
+        "720575941452078414",
+        "720575941456844269",
+        "720575941463078413",
+        "720575941465067277",
+        "720575941476073258",
+        "720575941478435377",
+        "720575941482935994",
+        "720575941487239376",
+        "720575941487790733",
+        "720575941509895184",
+        "720575941511872528",
+        "720575941521343667",
+        "720575941522214391",
+        "720575941534896306",
+        "720575941535295242",
+        "720575941543009053",
+        "720575941545073669",
+        "720575941551894590",
+        "720575941555721444",
+        "720575941556252900",
+        "720575941560102671",
+        "720575941565467282",
+        "720575941568903026",
+        "720575941577698137",
+        "720575941578548313",
+        "720575941585493726",
+        "720575941592598379",
+        "720575941592898667",
+        "720575941595884421",
+        "720575941602924985",
+        "720575941609068141",
+        "720575941625283018",
+        "720575941632762555",
+        "720575941645036961"
+      ],
+      "output_left": [
+        "720575941433155799"
+      ],
+      "output_right": [
+        "720575941566493282"
+      ]
+    },
+    "nt_class_map": {
+      "ACH": "exc",
+      "acetylcholine": "exc",
+      "cholinergic": "exc",
+      "GABA": "inh",
+      "GABAergic": "inh",
+      "gaba,nitric_oxide": "inh",
+      "dopamine,gaba": "inh",
+      "gaba,serotonin": "inh",
+      "acetylcholine,dopamine,nitric_oxide": "exc",
+      "acetylcholine,nitric_oxide": "exc",
+      "acetylcholine,serotonin": "exc",
+      "acetylcholine,octopamine": "exc",
+      "acetylcholine,dopamine": "exc"
+    },
+    "neuron_class_overrides": {},
+    "neural": {
+      "unit_conductance_nS": 0.3,
+      "capacitance_pF": 200.0,
+      "leak_nS": 10.0,
+      "rest_mV": -65.0,
+      "reset_mV": -65.0,
+      "threshold_mV": -50.0,
+      "exc_reversal_mV": 0.0,
+      "inh_reversal_mV": -80.0,
+      "refractory_ms": 2.0,
+      "synapse_decay_ms": 5.0,
+      "release_fraction": 0.5,
+      "rate_filter_ms": 50.0
+    },
+    "decoder": {
+      "baseline": [
+        0.0,
+        0.0
+      ],
+      "gain_per_hz": [
+        0.025,
+        0.025
+      ],
+      "minimum": 0.0,
+      "maximum": 1.2
+    },
+    "stimulus": {
+      "amplitude_pA": 700.0,
+      "baseline_pA": 0.0,
+      "switch_every_s": 1.5,
+      "source_xy_mm": [
+        6.0,
+        3.0
+      ],
+      "odor_sigma_mm": 6.0
+    },
+    "model_notes": {
+      "status": "Initial real-connectome integration; incomplete fast-transmitter approximation, not a validated full-CNS simulation.",
+      "inputs": "All 45 left and 45 right ORN_DM1 rows from the uploaded CSV. Abstract scalar odor current, not a calibrated odor mixture.",
+      "outputs": "Right DNp09 -> left controller drive; left DNp09 -> right controller drive. Engineered steering mapping; verify its sign in this body. Not a literal VNC motor mapping.",
+      "transmitters": "Verified labels take priority. ACh/GABA fast effects only; explicitly listed cotransmitter combinations retain ACh/GABA and omit modulatory effects. GLUT, HIST, pure modulators, unknown and ambiguous fast mixtures have disabled outgoing effects. All retained nodes still have LIF state.",
+      "controller": "Zero baseline drive: no hidden fallback movement when DNp09 stays silent.",
+      "scope": "All non-excluded metadata nodes and matched edges loaded, including VNC if present in the connection file. Descending readout bypasses VNC-to-muscle actuation."
+    }
+  },
+  "network_report": {
+    "mode": "REAL CSV NETWORK / INCOMPLETE FAST-TRANSMITTER APPROXIMATION",
+    "metadata_rows": 158262,
+    "neurons": 157789,
+    "explicitly_excluded_non_neuronal_rows": 473,
+    "neurons_with_edges": 153746,
+    "isolated_metadata_rows": 4043,
+    "raw_csv_rows": 3990039,
+    "raw_positive_rows": 3989263,
+    "zero_count_rows": 0,
+    "excluded_non_neuronal_edge_rows": 776,
+    "missing_attribute_neurons": 0,
+    "active_unique_edges": 2329468,
+    "disabled_sources": 39490,
+    "disabled_edge_rows": 950683,
+    "omitted_synapse_count": 5265111.0,
+    "total_neuronal_synapse_count": 23553107.0,
+    "transmitter_class_counts": {
+      "disabled": 47392,
+      "exc": 89219,
+      "inh": 21178
+    },
+    "disabled_presynaptic_labels": {
+      "(blank)": 423,
+      "GLUT": 14802,
+      "glutamate": 8188,
+      "SER": 1321,
+      "HIST": 4133,
+      "histamine": 923,
+      "dopamine": 148,
+      "DA": 6877,
+      "OCT": 1334,
+      "acetylcholine,histamine": 905,
+      "TYR": 78,
+      "tyramine": 92,
+      "serotonin": 82,
+      "dopamine,serotonin": 4,
+      "octopamine": 55,
+      "nitric_oxide": 7,
+      "glutamate,serotonin,tyramine": 8,
+      "dopamine,nitric_oxide": 4,
+      "glutamate,serotonin": 42,
+      "glutamate,tyramine": 6,
+      "glycine": 14,
+      "acetylcholine,glutamate": 26,
+      "dopamine,tyramine": 5,
+      "dopamine,glutamate,serotonin": 6,
+      "acetylcholine,glycine": 2,
+      "acetylcholine,gaba": 3,
+      "glutamate,octopamine": 2
+    },
+    "graph_super_class_counts": {
+      "optic_lobe_intrinsic": 71855,
+      "central_brain_intrinsic": 30759,
+      "sensory": 15076,
+      "ventral_nerve_cord_intrinsic": 12827,
+      "": 10845,
+      "visual_projection": 7225,
+      "ascending": 1847,
+      "descending": 1315,
+      "motor": 805,
+      "sensory_ascending": 507,
+      "visual_centrifugal": 458,
+      "visceral_circulatory": 210,
+      "sensory_descending": 12,
+      "ascending_visceral_circulatory": 5
+    },
+    "populations": {
+      "input_left": {
+        "neurons": 45,
+        "present_in_edges": 45,
+        "with_active_incoming": 45,
+        "with_active_outgoing": 45,
+        "reachable_from_inputs": 45
+      },
+      "input_right": {
+        "neurons": 45,
+        "present_in_edges": 45,
+        "with_active_incoming": 45,
+        "with_active_outgoing": 45,
+        "reachable_from_inputs": 45
+      },
+      "output_left": {
+        "neurons": 1,
+        "present_in_edges": 1,
+        "with_active_incoming": 1,
+        "with_active_outgoing": 1,
+        "reachable_from_inputs": 1
+      },
+      "output_right": {
+        "neurons": 1,
+        "present_in_edges": 1,
+        "with_active_incoming": 1,
+        "with_active_outgoing": 1,
+        "reachable_from_inputs": 1
+      }
+    },
+    "warnings": [
+      "Point-neuron parameters and count-to-conductance scale are uncalibrated.",
+      "Hybrid gait generation bypasses biological VNC-to-muscle control.",
+      "Structural reachability is not evidence of neural activation or behavior.",
+      "Unsupported transmitter outputs are OMITTED, not simulated as neutral physiology."
+    ],
+    "preflight_errors": [],
+    "connectivity_file": {
+      "path": "C:\\Users\\sysco\\Documents\\GitHub\\Flywire-Brain-Model\\Data\\connections_princeton.csv",
+      "bytes": 198079921
+    },
+    "metadata_file": {
+      "path": "C:\\Users\\sysco\\Documents\\GitHub\\Flywire-Brain-Model\\Data\\neurons.csv",
+      "bytes": 21637928
+    }
+  }
+}
