@@ -1,0 +1,10 @@
+{
+  "simulated_s": 0.2,
+  "wall_s": 2.031129500013776,
+  "neural_host_and_wait_s": 2.0091055006778333,
+  "body_compute_s": 0.0,
+  "motor_reads": 200,
+  "motor_interval_ms": 1.0,
+  "neural_dt_ms": 0.1,
+  "timing_note": "Neural time measures host submission and waits, not isolated GPU kernel time; GPU work can overlap body work."
+}

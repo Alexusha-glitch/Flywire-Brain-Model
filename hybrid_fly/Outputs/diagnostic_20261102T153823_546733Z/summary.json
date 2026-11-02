@@ -1,0 +1,120 @@
+{
+  "fixed_antenna_proxies_mm": [
+    [
+      0.0,
+      0.25
+    ],
+    [
+      0.0,
+      -0.25
+    ]
+  ],
+  "odor_levels": [
+    0.5460554660512965,
+    0.5237706460332205
+  ],
+  "trials": {
+    "no_input": {
+      "spikes": {
+        "input_left": 0,
+        "input_right": 0,
+        "output_left": 0,
+        "output_right": 0
+      },
+      "sampled_peak_mean_voltage_mV": [
+        -65.0,
+        -65.0,
+        -65.0,
+        -65.0
+      ],
+      "sampled_peak_mean_ge_nS": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "sampled_peak_mean_gi_nS": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "final_output_rates_hz": [
+        0.0,
+        0.0
+      ],
+      "final_drive": [
+        0.0,
+        0.0
+      ]
+    },
+    "odor": {
+      "spikes": {
+        "input_left": 751,
+        "input_right": 672,
+        "output_left": 0,
+        "output_right": 0
+      },
+      "sampled_peak_mean_voltage_mV": [
+        -52.47101352944137,
+        -50.46031786653946,
+        -65.0,
+        -65.0
+      ],
+      "sampled_peak_mean_ge_nS": [
+        1.2386940202234404,
+        0.8464907067576732,
+        2.787784859698804,
+        1.6764028893560308
+      ],
+      "sampled_peak_mean_gi_nS": [
+        2.471022301071661,
+        2.608149203842682,
+        36.34022150156818,
+        27.733947711024268
+      ],
+      "final_output_rates_hz": [
+        0.0,
+        0.0
+      ],
+      "final_drive": [
+        0.0,
+        0.0
+      ]
+    },
+    "direct_output": {
+      "spikes": {
+        "input_left": 0,
+        "input_right": 0,
+        "output_left": 18,
+        "output_right": 19
+      },
+      "sampled_peak_mean_voltage_mV": [
+        -65.0,
+        -65.0,
+        -50.57908863013466,
+        -50.49165735132869
+      ],
+      "sampled_peak_mean_ge_nS": [
+        0.0,
+        0.0,
+        3.4997898203254754,
+        1.5964753237153304
+      ],
+      "sampled_peak_mean_gi_nS": [
+        0.0,
+        0.0,
+        22.675630265584875,
+        22.031226881657393
+      ],
+      "final_output_rates_hz": [
+        68.98416425385487,
+        72.04369459038554
+      ],
+      "final_drive": [
+        1.2,
+        1.2
+      ]
+    }
+  }
+}

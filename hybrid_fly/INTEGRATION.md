@@ -4,6 +4,26 @@ This patch uses real IDs from your uploaded neurons.csv. It is compatible with t
 
 ## Install
 
+Neural simulation now defaults to the CuPy GPU backend, including BANC mode in
+`run_ymaze.py`. Set `neural.backend` in `hybrid_config.json` or pass
+`--backend cpu` to either runner to select CPU explicitly. GPU mode requires
+CuPy compatible with your NVIDIA CUDA driver/runtime; it reports an error if GPU
+initialization fails. FlyGym/MuJoCo body physics and CSV loading still run on CPU.
+The base `requirements.txt` contains the CPU dependencies; install a CuPy build
+matching your CUDA environment separately.
+
+Both runners now read neural motor outputs every 1 ms and hold the last command
+between readouts. Neural integration remains at its existing timestep (0.1 ms by
+default). Use `--motor-dt-ms 0.1` to restore the original readout frequency, or
+`--motor-dt-ms 1` for the new default. Actual intervals round to whole simulation
+steps (whole neural updates in the Y-maze). This sample-and-hold can change body
+trajectories; full-network behavior still needs validation.
+
+`run_hybrid.py` writes `timing.json` with body compute time, neural host submission
+and wait time, and motor readout count. Neural time is not isolated GPU kernel
+time: asynchronous GPU work can overlap CPU physics. Viewer and logging overhead
+are included in total wall time. Use `--no-viewer` for timing comparisons.
+
 1. Close a running simulation. Keep a backup of your current hybrid_config.json and load_network.py.
 2. Extract this archive. Copy its files directly into:
    C:\Users\sysco\Documents\GitHub\Flywire-Brain-Model\hybrid_fly
@@ -16,6 +36,28 @@ cd C:\Users\sysco\Documents\GitHub\Flywire-Brain-Model
 ```
 
 ## First: audit the actual connections
+
+### Walking diagnostics
+
+From the project root, run the isolated no-input, fixed-position odor, and direct
+DNp09 current tests (writes population voltages, conductances, rates and spike
+counts plus the connectivity audit under `hybrid_fly/Outputs/diagnostic_*`):
+
+```powershell
+.\.venv-body312\Scripts\python.exe .\hybrid_fly\diagnose_pathway.py --seconds 0.5
+```
+
+Test the neural-to-body interface with a diagnostic 700 pA current to both output
+populations:
+
+```powershell
+.\.venv-body312\Scripts\python.exe .\hybrid_fly\run_hybrid.py --mode banc --output-current-pa 700 --seconds 3
+```
+
+Neural motor commands require zero baseline and zero minimum drive. Nonzero values in custom configs are rejected. See PROPAGATION_RESEARCH.md for the research review.
+Direct current is also diagnostic, not a calibrated physiological intervention.
+Conductance snapshots in the diagnostic include newly released gates; sampled
+voltage maxima are not exact pre-reset spike peaks. All trials reset neural state.
 
 ```powershell
 .\.venv-body312\Scripts\python.exe .\hybrid_fly\load_network.py

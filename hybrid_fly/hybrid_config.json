@@ -136,6 +136,7 @@
   },
   "neuron_class_overrides": {},
   "neural": {
+    "backend": "gpu",
     "unit_conductance_nS": 0.3,
     "capacitance_pF": 200.0,
     "leak_nS": 10.0,

@@ -72,7 +72,10 @@ def main():
     p.add_argument('--seed',type=int,default=0)
     p.add_argument('--maze-config',default=str(here/'ymaze_config.json'))
     p.add_argument('--brain-config',default=str(here/'hybrid_config.json'))
+    p.add_argument('--backend',choices=['cpu','gpu'],default=None,
+        help='Neural backend (default: config setting, otherwise gpu); BANC only')
     p.add_argument('--neural-dt-ms',type=float,default=0.1,help='BANC only; 0.5 is faster but changes numerical approximation')
+    p.add_argument('--motor-dt-ms',type=float,default=1.0,help='BANC motor readout interval; commands held between readouts (ms)')
     p.add_argument('--no-viewer',action='store_true')
     p.add_argument('--fast',action='store_true',help='Do not pace to real time')
     p.add_argument('--preview',action='store_true',help='Save top-down maze image without loading FlyGym')
@@ -80,6 +83,7 @@ def main():
     args=p.parse_args()
     if not np.isfinite(args.seconds) or args.seconds<=0: p.error('--seconds must be positive')
     if not 0<args.neural_dt_ms<=1: p.error('--neural-dt-ms must be in (0,1]')
+    if not np.isfinite(args.motor_dt_ms) or args.motor_dt_ms<=0: p.error('--motor-dt-ms must be positive and finite')
     maze_path=Path(args.maze_config).resolve()
     cfg=json.loads(maze_path.read_text(encoding='utf-8-sig')); maze=YMaze(cfg)
     stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
@@ -93,10 +97,13 @@ def main():
         from load_network import load_network
         from neural_model import MotorDecoder
         bp=Path(args.brain_config).resolve(); brain_cfg=json.loads(bp.read_text(encoding='utf-8-sig'))
+        args.backend=args.backend or brain_cfg['neural'].get('backend','gpu')
+        brain_cfg['neural']['backend']=args.backend
         brain,populations,report=load_network(brain_cfg,bp.parent)
         decoder=MotorDecoder(brain,populations,brain_cfg['decoder'])
-        inputs=[brain.indices(populations[k]) for k in ('input_left','input_right')]
-        current=np.zeros(len(brain.ids))
+        inputs=[brain.xp.asarray(brain.indices(populations[k])) for k in ('input_left','input_right')]
+        current=brain.xp.zeros(len(brain.ids))
+        print(f'Neural backend: {brain.backend}; precision: float64',flush=True)
         print('BANC: odor drives selected inputs; no scripted steering or collision sensory input.',flush=True)
     else:
         print(f'SCRIPTED BODY TEST: target={args.arm}; brain NOT loaded; odor does not steer this mode.',flush=True)
@@ -105,10 +112,12 @@ def main():
     from flygym_demo.complex_terrain import HybridControllerObservation, apply_locomotion_action
     dt=sim.timestep
     stride=max(1,round(args.neural_dt_ms/1000/dt))
+    motor_stride=max(1,round(args.motor_dt_ms/1000/(stride*dt)))
     if brain is not None and not np.isclose(stride*dt,args.neural_dt_ms/1000,rtol=0,atol=1e-10):
         sim.close(); raise ValueError('Neural dt must be an integer multiple of physics dt.')
     metadata=dict(arguments=vars(args),maze=cfg,brain_config=brain_cfg,network_report=report,
         physics_dt_s=dt,neural_dt_s=stride*dt if brain is not None else None,
+        motor_interval_s=motor_stride*stride*dt if brain is not None else None,
         limitations=['Gaussian odor proxy has no wall occlusion or airflow.',
         'Hybrid leg controller, not direct biological VNC-to-muscle control.',
         'No wall-touch signal is injected into the brain. Scripted mode uses privileged position feedback.'])
@@ -159,7 +168,9 @@ def main():
                     current.fill(0)
                     for indices,level in zip(inputs,levels):
                         current[indices]+=brain_cfg['stimulus']['baseline_pA']+brain_cfg['stimulus']['amplitude_pA']*level
-                    brain.step(current,interval); drive,rates=decoder.read(brain.rates_hz)
+                    brain.step(current,interval)
+                    if neural_steps%motor_stride==0:
+                        drive,rates=decoder.read(brain.rates_hz)
                     neural_steps+=1; input_integral.fill(0); pending=0
                     neural_wall+=time.perf_counter()-tic
                 pos=sim.mj_data.xpos[thorax].copy()
@@ -169,6 +180,7 @@ def main():
                 if pos[2]>cfg['wall_height_mm']+1 or not maze.contains(pos[:2]): status='escaped'
                 elif tracker.choice: status='choice'
                 if step%log_stride==0 or status!='timeout' or step==nsteps-1:
+                    if brain is not None: brain.check_health()
                     contacts=sim.mj_data.contact
                     wall_contacts=int(np.count_nonzero(np.isin(contacts.geom1,wall_ids) | np.isin(contacts.geom2,wall_ids)))
                     wall_contact_samples+=int(wall_contacts>0)
