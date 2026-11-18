@@ -1,5 +1,11 @@
 # Connect your CSV network to the existing hybrid fly
 
+Current transmitter policy: the default config uses an expanded, explicitly
+approximate sign assignment for previously unsupported transmitters and unknown
+labels. See [TRANSMITTER_POLICY.md](TRANSMITTER_POLICY.md) for rules, evidence,
+uncertainty and overrides. Historical disabled-transmitter counts below describe
+the earlier configuration; use a fresh audit for the current configuration.
+
 This patch uses real IDs from your uploaded neurons.csv. It is compatible with the previously supplied run_hybrid.py and neural_model.py and does not replace either. It requires the existing NumPy, pandas and SciPy dependencies. The audit itself does not import FlyGym.
 
 ## Install

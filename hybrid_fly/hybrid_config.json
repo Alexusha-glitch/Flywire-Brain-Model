@@ -2,7 +2,7 @@
   "data": {
     "neurons_csv": "../Data/neurons.csv",
     "connections_csv": "../Data/connections_princeton.csv",
-    "unmapped_transmitters": "disable",
+    "unmapped_transmitters": "guess",
     "exclude_super_classes": [
       "glia",
       "trachea",
@@ -176,8 +176,13 @@
     "status": "Initial real-connectome integration; incomplete fast-transmitter approximation, not a validated full-CNS simulation.",
     "inputs": "All 45 left and 45 right ORN_DM1 rows from the uploaded CSV. Abstract scalar odor current, not a calibrated odor mixture.",
     "outputs": "Right DNp09 -> left controller drive; left DNp09 -> right controller drive. Engineered steering mapping; verify its sign in this body. Not a literal VNC motor mapping.",
-    "transmitters": "Verified labels take priority. ACh/GABA fast effects only; explicitly listed cotransmitter combinations retain ACh/GABA and omit modulatory effects. GLUT, HIST, pure modulators, unknown and ambiguous fast mixtures have disabled outgoing effects. All retained nodes still have LIF state.",
+    "transmitters": "Expanded single-sign approximation: explicit whole-label rules first; otherwise glutamate/histamine/GABA inhibitory, acetylcholine excitatory, pure modulators excitatory proxy, mixed fast signs inhibitory, unknown/blank excitatory guess. No receptor-specific or slow modulatory dynamics. Assignment audit records guesses; neuron overrides take precedence.",
     "controller": "Zero baseline drive: no hidden fallback movement when DNp09 stays silent.",
     "scope": "All non-excluded metadata nodes and matched edges loaded, including VNC if present in the connection file. Descending readout bypasses VNC-to-muscle actuation."
+  },
+  "transmitter_guesses": {
+    "mixed_fast_class": "inh",
+    "pure_modulator_class": "exc",
+    "unknown_class": "exc"
   }
 }

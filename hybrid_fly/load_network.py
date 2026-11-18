@@ -42,24 +42,54 @@ def checked_ids(series):
 
 
 def classify(label, cfg):
-    """Only explicit whole-label rules; never guess a cotransmitter's sign."""
+    """Resolve explicit rules first, then an opt-in, auditable sign approximation."""
     rules = {normalized(k): v for k, v in cfg['nt_class_map'].items()}
-    return rules.get(normalized(label), 'disabled')
+    key = normalized(label)
+    if key in rules:
+        return rules[key]
+    if cfg['data'].get('unmapped_transmitters') != 'guess':
+        return 'disabled'
+    assumptions = cfg.get('transmitter_guesses', {})
+    aliases = {'ach': 'exc', 'acetylcholine': 'exc', 'cholinergic': 'exc',
+               'gaba': 'inh', 'gabaergic': 'inh', 'glut': 'inh', 'glutamate': 'inh',
+               'hist': 'inh', 'histamine': 'inh', 'da': 'mod', 'dopamine': 'mod',
+               'ser': 'mod', 'serotonin': 'mod', '5ht': 'mod', 'oct': 'mod',
+               'octopamine': 'mod', 'tyr': 'mod', 'tyramine': 'mod',
+               'nitricoxide': 'mod', 'no': 'mod'}
+    parts = [aliases.get(normalized(x), 'unknown') for x in re.split(r'[,;+|/]', str(label))]
+    fast = set(parts) & {'exc', 'inh'}
+    if len(fast) > 1:
+        return assumptions.get('mixed_fast_class', 'inh')
+    if fast:
+        return next(iter(fast))
+    if 'mod' in parts:
+        return assumptions.get('pure_modulator_class', 'exc')
+    return assumptions.get('unknown_class', 'exc')
 
 
 def load_network(cfg, folder, demo=False, audit_only=False):
+    dynamics = cfg['neural'].get('dynamics', 'conductance')
+    if dynamics not in ('conductance', 'shiu'):
+        raise ValueError('neural.dynamics must be conductance or shiu')
+    if dynamics == 'shiu':
+        from shiu_model import ShiuModel as Model
+    else:
+        from neural_model import NeuralModel as Model
     if demo:
         from neural_model import NeuralModel
         ids = ['demo_sensory_L', 'demo_sensory_R', 'demo_output_L', 'demo_output_R']
         populations = dict(input_left=[ids[0]], input_right=[ids[1]],
                            output_left=[ids[2]], output_right=[ids[3]])
-        model = NeuralModel(ids, [0, 1], [2, 3], [40, 40], ['exc'] * 4, cfg['neural'])
+        model = Model(ids, [0, 1], [2, 3], [40, 40], ['exc'] * 4, cfg['neural'])
         return model, populations, {'mode': 'SYNTHETIC DEMO', 'neurons': 4, 'edges': 2}
     folder = Path(folder)
     settings, columns = cfg['data'], cfg['columns']
     policy = settings.get('unmapped_transmitters', 'error')
-    if policy not in ('error', 'disable'):
-        raise ValueError('unmapped_transmitters must be error or disable.')
+    if policy not in ('error', 'disable', 'guess'):
+        raise ValueError('unmapped_transmitters must be error, disable, or guess.')
+    for key in ('mixed_fast_class', 'pure_modulator_class', 'unknown_class'):
+        if cfg.get('transmitter_guesses', {}).get(key, 'exc') not in ('exc', 'inh'):
+            raise ValueError(f'transmitter_guesses.{key} must be exc or inh')
     populations = cfg['populations']
     for name in POPULATIONS:
         values = populations[name]
@@ -94,11 +124,14 @@ def load_network(cfg, folder, demo=False, audit_only=False):
         raise ValueError('NT mappings must be exc, inh, or disabled.')
     ids = attrs[idcol].tolist()
     lookup = dict(zip(ids, range(len(ids))))
-    classes = labels.map(normalized).map(rules).fillna('disabled').to_numpy(dtype='<U8')
+    label_classes = {label: classify(label, cfg) for label in labels.unique()}
+    classes = labels.map(label_classes).to_numpy(dtype='<U8')
+    inferred = ~labels.map(normalized).isin(rules) if policy == 'guess' else pd.Series(False, index=labels.index)
     for value, kind in cfg.get('neuron_class_overrides', {}).items():
         if value not in lookup or kind not in ('exc', 'inh', 'disabled'):
             raise ValueError(f'Invalid neuron override: {value} -> {kind}')
         classes[lookup[value]] = kind
+        inferred.iloc[lookup[value]] = False
     for name in POPULATIONS:
         missing = set(populations[name]) - lookup.keys()
         if missing:
@@ -113,6 +146,8 @@ def load_network(cfg, folder, demo=False, audit_only=False):
     ]
     if policy == 'disable':
         warnings.append('Unsupported transmitter outputs are OMITTED, not simulated as neutral physiology.')
+    if policy == 'guess':
+        warnings.append('Expanded sign approximation: modulators act as fast conductances; mixed labels collapse to one sign. Receptor dynamics and cotransmission are not modeled. Unknown signs are guesses.')
     print(f'{len(ids):,} retained metadata rows; {len(excluded_ids):,} non-neuronal rows excluded.', flush=True)
     print('Reading edges. Large CSVs can take several minutes.', flush=True)
     headers = pd.read_csv(conn_path, nrows=0)
@@ -200,6 +235,13 @@ def load_network(cfg, folder, demo=False, audit_only=False):
                   total_neuronal_synapse_count=float(counts.sum()),
                   transmitter_class_counts=dict(Counter(classes.tolist())),
                   disabled_presynaptic_labels=omitted_labels,
+                  transmitter_policy=policy,
+                  inferred_synapse_count=float(counts[inferred.to_numpy()[pre]].sum()),
+                  transmitter_assignments=[dict(label=str(label) or '(blank)',
+                      assigned_class=label_classes[label],
+                      inferred=bool(policy == 'guess' and normalized(label) not in rules),
+                      metadata_neurons=int((labels == label).sum())) for label in sorted(label_classes)],
+                  neuron_class_overrides=cfg.get('neuron_class_overrides', {}),
                   graph_super_class_counts=super_counts, populations=pop_report,
                   warnings=warnings, preflight_errors=errors,
                   connectivity_file=dict(path=str(conn_path), bytes=conn_path.stat().st_size),
@@ -211,7 +253,8 @@ def load_network(cfg, folder, demo=False, audit_only=False):
         raise ValueError('Preflight failed: ' + ' '.join(errors) + ' Run load_network.py to save the complete report.')
     print(f'Building sparse neural matrices for {n:,} nodes...', flush=True)
     from neural_model import NeuralModel
-    model = NeuralModel(ids, pre, post, counts, classes, cfg['neural'])
+    model = Model(ids, pre, post, counts, classes, cfg['neural'])
+    report['dynamics'] = dynamics
     report['active_unique_edges'] = model.exc.nnz + model.inh.nnz
     return model, populations, report
 

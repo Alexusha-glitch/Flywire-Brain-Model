@@ -69,6 +69,9 @@ def main():
     parser.add_argument('--backend', choices=['cpu', 'gpu'], default=None,
                         help='Neural backend (default: config setting, otherwise gpu)')
     parser.add_argument('--seconds', type=float, default=5.0)
+    parser.add_argument('--dynamics', choices=['conductance', 'shiu'], default=None)
+    parser.add_argument('--sensory-hz', type=float, default=150., help='Shiu Poisson rate at unit stimulus')
+    parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--output-current-pa', type=float, default=0.0,
                         help='Diagnostic current injected directly into both motor output populations')
     parser.add_argument('--motor-dt-ms', type=float, default=1.0,
@@ -100,6 +103,13 @@ def main():
     if args.output_current_pa:
         print('DIRECT OUTPUT STIMULATION TEST: bypasses the sensory pathway.', flush=True)
     cfg['neural']['backend'] = args.backend
+    cfg['neural']['dynamics'] = args.dynamics or cfg['neural'].get('dynamics', 'conductance')
+    cfg['neural']['seed'] = args.seed
+    is_shiu = cfg['neural']['dynamics'] == 'shiu'
+    if not np.isfinite(args.sensory_hz) or not 0 <= args.sensory_hz <= 1000:
+        raise ValueError('--sensory-hz must be in [0,1000]')
+    if is_shiu and args.output_current_pa:
+        raise ValueError('pA output stimulation is only supported by conductance dynamics.')
     p = cfg['neural']
     for key in ('unit_conductance_nS', 'capacitance_pF', 'leak_nS', 'synapse_decay_ms',
                 'rate_filter_ms', 'refractory_ms'):
@@ -188,11 +198,11 @@ def main():
                     if previous_levels is None or not np.array_equal(levels, previous_levels):
                         current.fill(0)
                         for indices, level in zip(input_groups, levels):
-                            current[indices] += stimulus['baseline_pA'] + stimulus['amplitude_pA'] * level
+                            current[indices] += args.sensory_hz * level if is_shiu else stimulus['baseline_pA'] + stimulus['amplitude_pA'] * level
                         for indices in decoder.groups:
                             current[indices] += args.output_current_pa
                         previous_levels = levels.copy()
-                    spikes_since_log += brain.step(current, dt).sum()
+                    spikes_since_log += (brain.step_poisson(current, dt) if is_shiu else brain.step(current, dt)).sum()
                     if step % motor_every == 0:
                         drive, rates = decoder.read(brain.rates_hz)
                         motor_reads += 1

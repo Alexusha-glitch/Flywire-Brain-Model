@@ -1,5 +1,10 @@
 # Research priorities for neural propagation
 
+Subsequent implementation: `TRANSMITTER_POLICY.md` documents the user-requested
+expanded sign approximation now enabled by default. References below to disabled
+transmitters describe the earlier policy. Receptor-specific physiology remains a
+research priority; the expanded sign policy does not implement those mechanisms.
+
 Reviewed 2026-11-02. No physiological constants were changed by this review.
 The motor baseline override has been removed. The decoder rejects nonzero
 baseline/minimum drive, so zero output activity produces zero motor command.

@@ -1,0 +1,323 @@
+{
+  "mode": "REAL CSV NETWORK / INCOMPLETE FAST-TRANSMITTER APPROXIMATION",
+  "metadata_rows": 158262,
+  "neurons": 157789,
+  "explicitly_excluded_non_neuronal_rows": 473,
+  "neurons_with_edges": 153746,
+  "isolated_metadata_rows": 4043,
+  "raw_csv_rows": 3990039,
+  "raw_positive_rows": 3989263,
+  "zero_count_rows": 0,
+  "excluded_non_neuronal_edge_rows": 776,
+  "missing_attribute_neurons": 0,
+  "active_unique_edges": 3036600,
+  "disabled_sources": 0,
+  "disabled_edge_rows": 0,
+  "omitted_synapse_count": 0.0,
+  "total_neuronal_synapse_count": 23553107.0,
+  "transmitter_class_counts": {
+    "exc": 106049,
+    "inh": 51740
+  },
+  "disabled_presynaptic_labels": {},
+  "transmitter_policy": "guess",
+  "inferred_synapse_count": 5265111.0,
+  "transmitter_assignments": [
+    {
+      "label": "(blank)",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 6000
+    },
+    {
+      "label": "ACH",
+      "assigned_class": "exc",
+      "inferred": false,
+      "metadata_neurons": 44860
+    },
+    {
+      "label": "DA",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 7233
+    },
+    {
+      "label": "GABA",
+      "assigned_class": "inh",
+      "inferred": false,
+      "metadata_neurons": 11444
+    },
+    {
+      "label": "GLUT",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 15699
+    },
+    {
+      "label": "HIST",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 4242
+    },
+    {
+      "label": "OCT",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 1456
+    },
+    {
+      "label": "SER",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 1408
+    },
+    {
+      "label": "TYR",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 78
+    },
+    {
+      "label": "acetylcholine",
+      "assigned_class": "exc",
+      "inferred": false,
+      "metadata_neurons": 43441
+    },
+    {
+      "label": "acetylcholine,dopamine",
+      "assigned_class": "exc",
+      "inferred": false,
+      "metadata_neurons": 3
+    },
+    {
+      "label": "acetylcholine,dopamine,nitric_oxide",
+      "assigned_class": "exc",
+      "inferred": false,
+      "metadata_neurons": 669
+    },
+    {
+      "label": "acetylcholine,gaba",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 3
+    },
+    {
+      "label": "acetylcholine,glutamate",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 32
+    },
+    {
+      "label": "acetylcholine,glycine",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 2
+    },
+    {
+      "label": "acetylcholine,histamine",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 913
+    },
+    {
+      "label": "acetylcholine,nitric_oxide",
+      "assigned_class": "exc",
+      "inferred": false,
+      "metadata_neurons": 167
+    },
+    {
+      "label": "acetylcholine,octopamine",
+      "assigned_class": "exc",
+      "inferred": false,
+      "metadata_neurons": 4
+    },
+    {
+      "label": "acetylcholine,serotonin",
+      "assigned_class": "exc",
+      "inferred": false,
+      "metadata_neurons": 75
+    },
+    {
+      "label": "dopamine",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 355
+    },
+    {
+      "label": "dopamine,gaba",
+      "assigned_class": "inh",
+      "inferred": false,
+      "metadata_neurons": 5
+    },
+    {
+      "label": "dopamine,glutamate,serotonin",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 6
+    },
+    {
+      "label": "dopamine,nitric_oxide",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 4
+    },
+    {
+      "label": "dopamine,serotonin",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 4
+    },
+    {
+      "label": "dopamine,tyramine",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 5
+    },
+    {
+      "label": "gaba",
+      "assigned_class": "inh",
+      "inferred": false,
+      "metadata_neurons": 6844
+    },
+    {
+      "label": "gaba,nitric_oxide",
+      "assigned_class": "inh",
+      "inferred": false,
+      "metadata_neurons": 2883
+    },
+    {
+      "label": "gaba,serotonin",
+      "assigned_class": "inh",
+      "inferred": false,
+      "metadata_neurons": 2
+    },
+    {
+      "label": "glutamate",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 8681
+    },
+    {
+      "label": "glutamate,octopamine",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 2
+    },
+    {
+      "label": "glutamate,serotonin",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 42
+    },
+    {
+      "label": "glutamate,serotonin,tyramine",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 8
+    },
+    {
+      "label": "glutamate,tyramine",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 6
+    },
+    {
+      "label": "glycine",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 14
+    },
+    {
+      "label": "histamine",
+      "assigned_class": "inh",
+      "inferred": true,
+      "metadata_neurons": 928
+    },
+    {
+      "label": "nitric_oxide",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 7
+    },
+    {
+      "label": "octopamine",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 81
+    },
+    {
+      "label": "serotonin",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 88
+    },
+    {
+      "label": "tyramine",
+      "assigned_class": "exc",
+      "inferred": true,
+      "metadata_neurons": 95
+    }
+  ],
+  "neuron_class_overrides": {},
+  "graph_super_class_counts": {
+    "optic_lobe_intrinsic": 71855,
+    "central_brain_intrinsic": 30759,
+    "sensory": 15076,
+    "ventral_nerve_cord_intrinsic": 12827,
+    "": 10845,
+    "visual_projection": 7225,
+    "ascending": 1847,
+    "descending": 1315,
+    "motor": 805,
+    "sensory_ascending": 507,
+    "visual_centrifugal": 458,
+    "visceral_circulatory": 210,
+    "sensory_descending": 12,
+    "ascending_visceral_circulatory": 5
+  },
+  "populations": {
+    "input_left": {
+      "neurons": 45,
+      "present_in_edges": 45,
+      "with_active_incoming": 45,
+      "with_active_outgoing": 45,
+      "reachable_from_inputs": 45
+    },
+    "input_right": {
+      "neurons": 45,
+      "present_in_edges": 45,
+      "with_active_incoming": 45,
+      "with_active_outgoing": 45,
+      "reachable_from_inputs": 45
+    },
+    "output_left": {
+      "neurons": 1,
+      "present_in_edges": 1,
+      "with_active_incoming": 1,
+      "with_active_outgoing": 1,
+      "reachable_from_inputs": 1
+    },
+    "output_right": {
+      "neurons": 1,
+      "present_in_edges": 1,
+      "with_active_incoming": 1,
+      "with_active_outgoing": 1,
+      "reachable_from_inputs": 1
+    }
+  },
+  "warnings": [
+    "Point-neuron parameters and count-to-conductance scale are uncalibrated.",
+    "Hybrid gait generation bypasses biological VNC-to-muscle control.",
+    "Structural reachability is not evidence of neural activation or behavior.",
+    "Expanded sign approximation: modulators act as fast conductances; mixed labels collapse to one sign. Receptor dynamics and cotransmission are not modeled. Unknown signs are guesses."
+  ],
+  "preflight_errors": [],
+  "connectivity_file": {
+    "path": "C:\\Users\\sysco\\OneDrive\\Documents\\GitHub\\Flywire-Brain-Model\\Data\\connections_princeton.csv",
+    "bytes": 198079921
+  },
+  "metadata_file": {
+    "path": "C:\\Users\\sysco\\OneDrive\\Documents\\GitHub\\Flywire-Brain-Model\\Data\\neurons.csv",
+    "bytes": 21637928
+  }
+}

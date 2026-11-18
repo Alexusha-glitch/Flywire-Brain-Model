@@ -1,0 +1,61 @@
+{
+  "runs": {
+    "sensory": {
+      "path": "hybrid_fly\\Outputs\\eon_20261112T150940_843026Z",
+      "completed_blocks": 10,
+      "requested_blocks": 10,
+      "simulated_s": 0.15,
+      "wall_s": 45.00407780000023,
+      "total_spikes": 43598,
+      "active_neurons": 5240,
+      "maximum_drive": 1.2,
+      "displacement_mm": null,
+      "status": "completed"
+    },
+    "direct-output": {
+      "path": "hybrid_fly\\Outputs\\eon_20261112T151122_992099Z",
+      "completed_blocks": 10,
+      "requested_blocks": 10,
+      "simulated_s": 0.15,
+      "wall_s": 44.58938279999984,
+      "total_spikes": 1419,
+      "active_neurons": 508,
+      "maximum_drive": 1.2,
+      "displacement_mm": null,
+      "status": "completed"
+    },
+    "disconnect-output": {
+      "path": "hybrid_fly\\Outputs\\eon_20261112T151123_253839Z",
+      "completed_blocks": 10,
+      "requested_blocks": 10,
+      "simulated_s": 0.15,
+      "wall_s": 44.81331620000037,
+      "total_spikes": 43598,
+      "active_neurons": 5240,
+      "maximum_drive": 0.0,
+      "displacement_mm": null,
+      "status": "completed"
+    },
+    "no-input": {
+      "path": "hybrid_fly\\Outputs\\eon_20261112T151135_885073Z",
+      "completed_blocks": 10,
+      "requested_blocks": 10,
+      "simulated_s": 0.15,
+      "wall_s": 44.216169000000264,
+      "total_spikes": 0,
+      "active_neurons": 0,
+      "maximum_drive": 0.0,
+      "displacement_mm": null,
+      "status": "completed"
+    }
+  },
+  "checks": {
+    "matched_neural_trials": true,
+    "identical_neuron_counts_and_block_readouts_after_motor_disconnection": true,
+    "no_input_quiet": true,
+    "direct_output_commands": true,
+    "disconnected_commands_zero": true,
+    "sensory_propagation": true
+  },
+  "scope": "Neural control checks only; no biological or embodied validation."
+}

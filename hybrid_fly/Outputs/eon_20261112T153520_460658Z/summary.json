@@ -1,0 +1,11 @@
+{
+  "completed_blocks": 10,
+  "requested_blocks": 10,
+  "simulated_s": 0.15,
+  "wall_s": 68.83027549999952,
+  "total_spikes": 43618,
+  "active_neurons": 5186,
+  "maximum_drive": 0.8333333333333335,
+  "displacement_mm": 0.1320091729911383,
+  "status": "completed"
+}
